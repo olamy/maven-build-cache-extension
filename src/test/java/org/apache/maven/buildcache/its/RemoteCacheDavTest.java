@@ -51,9 +51,9 @@ import org.apache.maven.buildcache.its.junit.IntegrationTestExtension;
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -64,9 +64,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @IntegrationTest("src/test/projects/remote-cache-dav")
 @Testcontainers(disabledWithoutDocker = true)
-@EnabledOnOs(OS.LINUX) // github actions do not support docker on windows and osx
 public class RemoteCacheDavTest {
-
     public static final String DAV_DOCKER_IMAGE =
             "xama/nginx-webdav@sha256:84171a7e67d7e98eeaa67de58e3ce141ec1d0ee9c37004e7096698c8379fd9cf";
     private static final String DAV_USERNAME = "admin";
@@ -118,17 +116,13 @@ public class RemoteCacheDavTest {
                 .withFileSystemBind(remoteCache.toString(), "/var/webdav/public");
     }
 
-    @Test
-    void testRemoteCacheWithWagon() throws VerificationException, IOException {
-        doTestRemoteCache("wagon");
+    public static Stream<Arguments> transports() {
+        return Stream.of(Arguments.of("wagon"), Arguments.of("http"));
     }
 
-    @Test
-    void testRemoteCacheWithHttp() throws VerificationException, IOException {
-        doTestRemoteCache("http");
-    }
-
-    protected void doTestRemoteCache(String transport) throws VerificationException, IOException {
+    @ParameterizedTest
+    @MethodSource("transports")
+    public void doTestRemoteCache(String transport) throws VerificationException, IOException {
         String url =
                 ("wagon".equals(transport) ? "dav:" : "") + "http://localhost:" + dav.getFirstMappedPort() + "/mbce";
         substitute(

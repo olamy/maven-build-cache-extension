@@ -51,6 +51,7 @@ import org.apache.maven.buildcache.its.junit.IntegrationTestExtension;
 import org.apache.maven.it.VerificationException;
 import org.apache.maven.it.Verifier;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -114,6 +115,12 @@ public class RemoteCacheDavTest {
                 .withEnv("WEBDAV_USERNAME", DAV_USERNAME)
                 .withEnv("WEBDAV_PASSWORD", DAV_PASSWORD)
                 .withFileSystemBind(remoteCache.toString(), "/var/webdav/public");
+    }
+
+    @AfterEach
+    public void cleanup() throws Exception {
+        dav.execInContainer("rm", "-rf", "/var/webdav/public/*");
+        dav.close();
     }
 
     public static Stream<Arguments> transports() {

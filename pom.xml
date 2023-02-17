@@ -65,7 +65,7 @@ under the License.
     <classWorldsVersion>2.6.0</classWorldsVersion>
 
     <!-- default maven version, can be override by maven3 profile -->
-    <mavenVersion>4.0.0-alpha-2</mavenVersion>
+    <mavenVersion>4.0.0-alpha-4</mavenVersion>
     <maven.dir>maven4</maven.dir>
     <maven.basedir>${project.build.directory}/${maven.dir}</maven.basedir>
 
@@ -246,30 +246,6 @@ under the License.
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <!--
-                <version>3.1.2</version>
-                <configuration>
-                    <violationSeverity>info</violationSeverity>
-                    <suppressionsLocation>${maven.multiModuleProjectDirectory}/src/build/checkstyle-suppressions.xml</suppressionsLocation>
-                    <headerLocation>${maven.multiModuleProjectDirectory}/src/build/maven-header.txt</headerLocation>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>8.41.1</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven.shared</groupId>
-                        <artifactId>maven-shared-resources</artifactId>
-                        <version>3</version>
-                    </dependency>
-                </dependencies>
-                -->
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
         <configuration>
@@ -370,7 +346,6 @@ under the License.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M7</version>
         <configuration>
           <argLine>-Xmx256m --add-exports java.base/sun.nio.ch=ALL-UNNAMED</argLine>
           <environmentVariables>
@@ -406,8 +381,7 @@ under the License.
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.0.0-M7</version>
+            <artifactId>maven-failsafe-plugin</artifactId>
             <configuration>
               <systemPropertyVariables>
                 <!-- local repo provided by m-invoker-p:install -->
@@ -416,17 +390,16 @@ under the License.
                 <maven.multiModuleProjectDirectory>${maven.multiModuleProjectDirectory}</maven.multiModuleProjectDirectory>
                 <maven.basedir>${maven.basedir}</maven.basedir>
               </systemPropertyVariables>
+              <includes>**/its/**</includes>
             </configuration>
             <executions>
               <execution>
-                <id>integration-test</id>
+                <id>it-tests</id>
                 <goals>
-                  <goal>test</goal>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
                 </goals>
                 <phase>integration-test</phase>
-                <configuration>
-                  <includes>**/its/**</includes>
-                </configuration>
               </execution>
             </executions>
           </plugin>

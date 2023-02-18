@@ -129,11 +129,11 @@ public class RemoteCacheDavTest {
 
         LOGGER.info("before clean in container result: {}", result);
 
-        result = dav.execInContainer("rm", "-rf", "/var/webdav/public/*");
+        result = dav.execInContainer("rm", "-rf", "/var/webdav/public");
 
         LOGGER.info("clean in container result: {}", result);
 
-        result = dav.execInContainer("ls", "-lrt", "/var/webdav/public/");
+        result = dav.execInContainer("ls", "-lrt", "/var/webdav/");
 
         LOGGER.info("after clean in container result: {}", result);
 

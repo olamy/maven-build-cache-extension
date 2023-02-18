@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.testcontainers.shaded.org.apache.commons.lang3.tuple.Pair;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -69,6 +71,7 @@ class BuildCacheMojosExecutionStrategyTest {
         }
 
         @Test
+        //@DisabledOnOs(value = OS.WINDOWS, disabledReason = "not working for windows")
         void testBasicParamsMatching() {
 
             List<Pair<TrackedProperty, PropertyValue>> cacheProperties = Lists.newArrayList(
@@ -92,7 +95,7 @@ class BuildCacheMojosExecutionStrategyTest {
             when(projectMock.getBasedir()).thenReturn(new File("/a/b"));
 
             TestMojo testMojo = TestMojo.create(
-                    true, 1, new File("/a/b/c"), Paths.get("../d/e"), Lists.newArrayList("a", "b", "c"), new String[] {
+                    true, 1, Paths.get("/a/b/c").toFile(), Paths.get("../d/e"), Lists.newArrayList("a", "b", "c"), new String[] {
                         "c", "d", "e"
                     });
 

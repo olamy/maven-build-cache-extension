@@ -26,7 +26,7 @@ jobs:
     name: Verify
     uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v3
     with:
-      maven-args: "-Dmaven.test.redirectTestOutputToFile=false"
+      maven-args: '-D"maven.test.redirectTestOutputToFile=false"'
       matrix-exclude: >
         [ 
           {"jdk": "8"}

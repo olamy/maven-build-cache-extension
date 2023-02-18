@@ -313,6 +313,10 @@ public class BuildCacheMojosExecutionStrategy implements MojosExecutionStrategy 
     private static String normalizedPath(Path path, Path baseDirPath) {
         boolean isProjectSubdir = path.isAbsolute() && path.startsWith(baseDirPath);
         Path preparedPath = isProjectSubdir ? baseDirPath.relativize(path) : path;
-        return preparedPath.normalize().toString();
+        String normalizedPath = preparedPath.normalize().toString();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("normalizedPath '{}' - {} return {}", path, baseDirPath, normalizedPath);
+        }
+        return normalizedPath;
     }
 }

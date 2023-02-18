@@ -123,7 +123,6 @@ public class RemoteCacheDavTest {
 
     @AfterEach
     public void cleanup() throws Exception {
-        cleanDirs(localCache, remoteCache.resolve("mbce"));
 
         org.testcontainers.containers.Container.ExecResult result =
                 dav.execInContainer("ls", "-lrt", "/var/webdav/public/");
@@ -137,6 +136,8 @@ public class RemoteCacheDavTest {
         result = dav.execInContainer("ls", "-lrt", "/var/webdav/public/");
 
         LOGGER.info("after clean in container result: {}", result);
+
+        cleanDirs(localCache, remoteCache.resolve("mbce"));
 
         dav.close();
     }

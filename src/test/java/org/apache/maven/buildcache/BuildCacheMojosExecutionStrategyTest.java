@@ -69,14 +69,13 @@ class BuildCacheMojosExecutionStrategyTest {
         }
 
         @Test
-        // @DisabledOnOs(value = OS.WINDOWS, disabledReason = "not working for windows")
         void testBasicParamsMatching() {
 
             List<Pair<TrackedProperty, PropertyValue>> cacheProperties = Lists.newArrayList(
                     setupProperty("bool", "true"),
                     setupProperty("primitive", "1"),
                     setupProperty("file", "c"),
-                    setupProperty("path", "../d/e"),
+                    setupProperty("path", ".." + File.separator + "d" + File.separator + "e"),
                     setupProperty("list", "[a, b, c]"),
                     setupProperty("array", "{c,d,e}"),
                     setupProperty("nullObject", null));
@@ -90,13 +89,14 @@ class BuildCacheMojosExecutionStrategyTest {
             when(cacheConfigMock.getTrackedProperties(executionMock)).thenReturn(trackedProperties);
             when(cacheRecordMock.getProperties()).thenReturn(cacheRecordProperties);
 
-            when(projectMock.getBasedir()).thenReturn(new File("/a/b"));
+            when(projectMock.getBasedir()).thenReturn(new File(File.separator + "a" + File.separator + "b"));
 
             TestMojo testMojo = TestMojo.create(
                     true,
                     1,
-                    Paths.get("/a/b/c").toFile(),
-                    Paths.get("../d/e"),
+                    Paths.get(File.separator + "a" + File.separator + "b" + File.separator + "c")
+                            .toFile(),
+                    Paths.get(".." + File.separator + "d" + File.separator + "e"),
                     Lists.newArrayList("a", "b", "c"),
                     new String[] {"c", "d", "e"});
 

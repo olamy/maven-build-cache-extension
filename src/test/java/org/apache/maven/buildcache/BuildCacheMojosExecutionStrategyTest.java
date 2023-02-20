@@ -78,7 +78,7 @@ class BuildCacheMojosExecutionStrategyTest {
                     setupProperty("bool", "true"),
                     setupProperty("primitive", "1"),
                     setupProperty("file", "c"),
-                    setupProperty("path", "../d/e"),
+                    setupProperty("path", windows ? "..\\d\\e" : "../d/e"),
                     setupProperty("list", "[a, b, c]"),
                     setupProperty("array", "{c,d,e}"),
                     setupProperty("nullObject", null));
@@ -100,7 +100,7 @@ class BuildCacheMojosExecutionStrategyTest {
                     windows
                             ? Paths.get("c:\\a\\b\\c").toFile()
                             : Paths.get("/a/b/c").toFile(),
-                    Paths.get(".." + File.separator + "d" + File.separator + "e"),
+                    Paths.get(windows ? "..\\d\\e" : "../d/e"),
                     Lists.newArrayList("a", "b", "c"),
                     new String[] {"c", "d", "e"});
 

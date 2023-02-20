@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.maven.buildcache.xml.CacheConfig;
 import org.apache.maven.buildcache.xml.build.CompletedExecution;
 import org.apache.maven.buildcache.xml.build.PropertyValue;
@@ -71,11 +72,13 @@ class BuildCacheMojosExecutionStrategyTest {
         @Test
         void testBasicParamsMatching() {
 
+            boolean windows = SystemUtils.IS_OS_WINDOWS;
+
             List<Pair<TrackedProperty, PropertyValue>> cacheProperties = Lists.newArrayList(
                     setupProperty("bool", "true"),
                     setupProperty("primitive", "1"),
                     setupProperty("file", "c"),
-                    setupProperty("path", ".." + File.separator + "d" + File.separator + "e"),
+                    setupProperty("path", "../d/e"),
                     setupProperty("list", "[a, b, c]"),
                     setupProperty("array", "{c,d,e}"),
                     setupProperty("nullObject", null));
@@ -89,13 +92,14 @@ class BuildCacheMojosExecutionStrategyTest {
             when(cacheConfigMock.getTrackedProperties(executionMock)).thenReturn(trackedProperties);
             when(cacheRecordMock.getProperties()).thenReturn(cacheRecordProperties);
 
-            when(projectMock.getBasedir()).thenReturn(new File(File.separator + "a" + File.separator + "b"));
+            when(projectMock.getBasedir()).thenReturn(windows ? new File("c:\\a\\b") : new File("/a/b"));
 
             TestMojo testMojo = TestMojo.create(
                     true,
                     1,
-                    Paths.get(File.separator + "a" + File.separator + "b" + File.separator + "c")
-                            .toFile(),
+                    windows
+                            ? Paths.get("c:\\a\\b\\c").toFile()
+                            : Paths.get("/a/b/c").toFile(),
                     Paths.get(".." + File.separator + "d" + File.separator + "e"),
                     Lists.newArrayList("a", "b", "c"),
                     new String[] {"c", "d", "e"});

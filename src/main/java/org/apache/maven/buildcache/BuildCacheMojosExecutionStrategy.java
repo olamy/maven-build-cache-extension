@@ -314,7 +314,7 @@ public class BuildCacheMojosExecutionStrategy implements MojosExecutionStrategy 
         boolean isProjectSubdir = path.isAbsolute() && path.startsWith(baseDirPath);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                    "normalizedPath isProjectSubdir {} path '{}' - baseDirPath '{}', path.isAbsolute() {}, path.startsWith(baseDirPath)",
+                    "normalizedPath isProjectSubdir {} path '{}' - baseDirPath '{}', path.isAbsolute() {}, path.startsWith(baseDirPath) {}",
                     isProjectSubdir,
                     path,
                     baseDirPath,
